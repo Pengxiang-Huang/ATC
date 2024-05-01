@@ -1,6 +1,6 @@
 # Project
 cmake_minimum_required(VERSION 3.13)
-project(CAT)
+project(HALIDE)
 
 # Programming languages to use
 enable_language(C CXX)
@@ -29,7 +29,7 @@ list(APPEND CMAKE_MODULE_PATH "${LLVM_CMAKE_DIR}")
 include(AddLLVM)
 
 # Pass
-add_subdirectory(src)
+add_subdirectory(pass)
 
 # Install
-install(PROGRAMS bin/cat-c DESTINATION bin)
+install(PROGRAMS bin/halide-c DESTINATION bin)

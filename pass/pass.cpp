@@ -7,10 +7,10 @@
 using namespace llvm;
 
 namespace {
-  struct CAT : public FunctionPass {
+  struct HALIDE : public FunctionPass {
     static char ID; 
 
-    CAT() : FunctionPass(ID) {}
+    HALIDE() : FunctionPass(ID) {}
 
     // This function is invoked once at the initialization phase of the compiler
     // The LLVM IR of functions isn't ready at this point
@@ -36,14 +36,14 @@ namespace {
 }
 
 // Next there is code to register your pass to "opt"
-char CAT::ID = 0;
-static RegisterPass<CAT> X("CAT", "Homework for the CAT class");
+char HALIDE::ID = 0;
+static RegisterPass<HALIDE> X("Halide", "Project for the ATC class");
 
 // Next there is code to register your pass to "clang"
-static CAT * _PassMaker = NULL;
+static HALIDE * _PassMaker = NULL;
 static RegisterStandardPasses _RegPass1(PassManagerBuilder::EP_OptimizerLast,
     [](const PassManagerBuilder&, legacy::PassManagerBase& PM) {
-        if(!_PassMaker){ PM.add(_PassMaker = new CAT());}}); // ** for -Ox
+        if(!_PassMaker){ PM.add(_PassMaker = new HALIDE());}}); // ** for -Ox
 static RegisterStandardPasses _RegPass2(PassManagerBuilder::EP_EnabledOnOptLevel0,
     [](const PassManagerBuilder&, legacy::PassManagerBase& PM) {
-        if(!_PassMaker){ PM.add(_PassMaker = new CAT()); }}); // ** for -O0
+        if(!_PassMaker){ PM.add(_PassMaker = new HALIDE()); }}); // ** for -O0

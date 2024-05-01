@@ -1,9 +1,9 @@
-OPTIONS=-I../halide
+OPTIONS=-I../misc
 OPT=-O2 -lm
 
 all: compiler_output program.ll
 
-compiler_output: program.bc ../misc/CAT.o
+compiler_output: program.bc ../misc/HALIDE.o
 	timeout 10m cat-c $^ 2> $@
 
 program.bc: program.c
@@ -12,13 +12,13 @@ program.bc: program.c
 program.ll: program.bc
 	llvm-dis $^
 
-program: program.bc ../misc/CAT.o
+program: program.bc ../misc/HALIDE.o
 	clang $(OPTIONS) $^ -o $@
 
 check: compiler_output
 	../misc/check.sh
 
-../misc/CAT.o: ../misc/CAT.c
+../misc/HALIDE.o: ../misc/HALIDE.c
 	clang $(OPT) -fdeclspec -c $^ -o $@
 
 install: program.bc program.ll

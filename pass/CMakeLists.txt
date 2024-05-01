@@ -1,11 +1,11 @@
 # Sources
-file(GLOB CATPassSrc "*.cpp")
+file(GLOB HALIDEPassSrc "*.cpp")
 
 # Compilation flags
-set_source_files_properties(${CATPassSrc} PROPERTIES COMPILE_FLAGS " -std=c++20")
+set_source_files_properties(${HALIDEPassSrc} PROPERTIES COMPILE_FLAGS " -std=c++20")
 
 # Name of the LLVM pass
-set(CATPassName "CAT")
+set(HALIDEPassName "HALIDE")
 
 # configure LLVM 
 find_package(LLVM REQUIRED CONFIG)
@@ -22,4 +22,4 @@ message(STATUS "LLVM_DIR IS ${LLVM_CMAKE_DIR}.")
 include_directories(${LLVM_INCLUDE_DIRS})
 
 # Declare the LLVM pass to compile
-add_llvm_library(${CATPassName} MODULE ${CATPassSrc})
+add_llvm_library(${HALIDEPassName} MODULE ${HALIDEPassSrc})
