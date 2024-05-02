@@ -1,3 +1,16 @@
 build/
 
 .cache/
+
+
+a.out 
+
+program.ll
+
+program.bc
+
+*.o
+
+compiler_output
+
+compile_commands.json

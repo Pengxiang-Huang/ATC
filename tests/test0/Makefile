@@ -1,30 +1,27 @@
-USE_VALGRIND=0 
+OPTIONS=-I../misc
+OPT=-O2 -lm
 
-all: parallel
+all: compiler_output program.ll
 
-parallel:
-	./misc/run_tests_parallel.sh $(USE_VALGRIND)
+compiler_output: program.bc ../misc/HALIDE.o
+	timeout 10m halide-c $^ 2> $@
 
-sequential:
-	./misc/run_tests.sh $(USE_VALGRIND)
+program.bc: program.c
+	clang $(OPTIONS) -O1 -fdeclspec -emit-llvm -c $<
 
-bitcode:
-	./misc/bitcode.sh
+program.ll: program.bc
+	llvm-dis $^
 
-bitcode_remove:
-	rm -f test*/bitcode/*
-	./misc/clean.sh
+program: program.bc ../misc/HALIDE.o
+	clang $(OPTIONS) $^ -o $@
 
-oracle:
-	./misc/oracle.sh
-
-oracle_remove:
-	rm -f test*/output*/*
-
-reinstall: bitcode_remove oracle_remove clean bitcode oracle
+../misc/HALIDE.o: ../misc/HALIDE.c
+	clang $(OPT) -fdeclspec -c $^ -o $@
 
 clean:
-	./misc/clean.sh
+	rm -rf program program_optimized program_optimized_output *.bc *.ll a.out diff core* program_output compiler_output *.txt tmpOut;
+	if test -d bitcode ; then cp bitcode/* . ; fi ;
+	rm -f *sorted ;
 
-.PHONY: parallel sequential bitcode bitcode_remove oracle oracle_remove reinstall clean
+.PHONY: run clean 
 
