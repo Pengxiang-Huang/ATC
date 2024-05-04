@@ -17,9 +17,12 @@ Halide::realize(aglorithm): apply the algoritm on all points in the grid
 Halide::split(dim, num) : split the dimension by the tile number
 
 
-
+ 
 
 
 ### Code Transformation
+the code transformation pass will perform the scheduling based on the given schedule,
+if not given schedule, it will perform the default schedule, which will update the producer before any consumer
+
 
 
