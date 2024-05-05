@@ -6,7 +6,7 @@ all: compiler_output program.ll
 compiler_output: program.bc ../misc/HALIDE.o
 	timeout 10m halide-c $^ 2> $@
 
-program.bc: program.c
+program.bc: program.cpp
 	clang $(OPTIONS) -O1 -fdeclspec -emit-llvm -c $<
 
 program.ll: program.bc
@@ -15,7 +15,7 @@ program.ll: program.bc
 program: program.bc ../misc/HALIDE.o
 	clang $(OPTIONS) $^ -o $@
 
-../misc/HALIDE.o: ../misc/HALIDE.c
+../misc/HALIDE.o: ../misc/HALIDE.cpp
 	clang $(OPT) -fdeclspec -c $^ -o $@
 
 clean:

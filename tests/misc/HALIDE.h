@@ -4,7 +4,10 @@
 #include <stdint.h>
 
 
-typedef int64_t * HALIDE_DATA;
+typedef struct {
+	int64_t * data; // memory base pointer
+	int64_t length; // length of the square
+} HALIDE_DATA ; 
 
 typedef void * HALIDE_ALGORITHM;
 
