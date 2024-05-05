@@ -1,15 +1,20 @@
 #ifndef HALIDE_H
 #define HALIDE_H
 
+#include <cstdint>
 #include <stdint.h>
-
+#include <vector>
 
 typedef struct {
 	int64_t * data; // memory base pointer
 	int64_t length; // length of the square
 } HALIDE_DATA ; 
 
-typedef void * HALIDE_ALGORITHM;
+typedef struct {
+	std::vector<int64_t> offset_x; 
+	std::vector<int64_t> offset_y;
+} HALIDE_ALGORITHM; 
+
 
 typedef void * HALIDE_SCHEDULE; 
 
@@ -19,6 +24,9 @@ typedef void * HALIDE_SCHEDULE;
 HALIDE_DATA HALIDE_new(int64_t length);
 
 HALIDE_DATA HALIDE_new(int64_t length, int64_t init_value);
+
+
+int64_t HALIDE_get(HALIDE_DATA, int64_t x , int64_t y); 
 
 /*
  * update a single grid in the image 
@@ -44,7 +52,7 @@ HALIDE_ALGORITHM HALIDE_algorithm(int64_t offset_x, int64_t offset_y);
  */
 HALIDE_ALGORITHM HALIDE_algorithm_add(HALIDE_ALGORITHM left, HALIDE_ALGORITHM right);
 
-HALIDE_ALGORITHM HALIDE_algorithm_sub(HALIDE_ALGORITHM left, HALIDE_ALGORITHM right);
+// HALIDE_ALGORITHM HALIDE_algorithm_sub(HALIDE_ALGORITHM left, HALIDE_ALGORITHM right);
 
 /*
  * apply the algorithm to the data, return a new object 

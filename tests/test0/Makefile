@@ -16,7 +16,7 @@ program: program.bc ../misc/HALIDE.o
 	clang $(OPTIONS) $^ -o $@
 
 ../misc/HALIDE.o: ../misc/HALIDE.cpp
-	clang $(OPT) -fdeclspec -c $^ -o $@
+	clang $(OPT) -fdeclspec -c $^ -o $@ 
 
 clean:
 	rm -rf program program_optimized program_optimized_output *.bc *.ll a.out diff core* program_output compiler_output *.txt tmpOut;
