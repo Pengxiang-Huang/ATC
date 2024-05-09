@@ -2,7 +2,7 @@
 file(GLOB HALIDEPassSrc "*.cpp")
 
 # Compilation flags
-set_source_files_properties(${HALIDEPassSrc} PROPERTIES COMPILE_FLAGS " -std=c++20")
+set_source_files_properties(${HALIDEPassSrc} PROPERTIES COMPILE_FLAGS " -std=c++2a")
 
 # Name of the LLVM pass
 set(HALIDEPassName "HALIDE")

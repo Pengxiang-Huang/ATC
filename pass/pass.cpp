@@ -23,6 +23,7 @@ namespace {
     // The LLVM IR of the input functions is ready and it can be analyzed and/or transformed
     bool runOnFunction (Function &F) override {
       errs() << "Hello LLVM World at \"runOnFunction\"\n" ;
+			errs() << "Function name is"<< F.getName() << "\n";
       return false;
     }
 
