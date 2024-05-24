@@ -4,34 +4,52 @@
 #include "llvm/IR/LegacyPassManager.h"
 #include "llvm/Transforms/IPO/PassManagerBuilder.h"
 
-using namespace llvm;
+
+#include "noelle/core/Noelle.hpp"
+
+using namespace arcana::noelle;
 
 namespace {
-  struct HALIDE : public FunctionPass {
+  struct HALIDE : public llvm::ModulePass {
     static char ID; 
 
-    HALIDE() : FunctionPass(ID) {}
+    HALIDE() : ModulePass(ID) {}
 
-    // This function is invoked once at the initialization phase of the compiler
-    // The LLVM IR of functions isn't ready at this point
     bool doInitialization (Module &M) override {
       errs() << "Hello LLVM World at \"doInitialization\"\n" ;
       return false;
     }
+		
+		/*
+		 * check if the transformation can be applied on the program 
+		 */
+		bool check_halide_form(Module &M){
+			bool isHalideForm = false;
+			return isHalideForm;
+		}
 
-    // This function is invoked once per function compiled
-    // The LLVM IR of the input functions is ready and it can be analyzed and/or transformed
-    bool runOnFunction (Function &F) override {
-      errs() << "Hello LLVM World at \"runOnFunction\"\n" ;
-			errs() << "Function name is"<< F.getName() << "\n";
+
+    bool runOnModule (Module &M) override {
+			auto &noelle = getAnalysis<Noelle>();
+
+			auto insts = noelle.numberOfProgramInstructions();
+
+			errs() << "the program has " << insts << " instructions\n";
+
+			auto loopStructures = noelle.getLoopStructures();
+
+			for (auto LS : *loopStructures){
+				auto entryInst = LS->getEntryInstruction();
+				errs() << "Loop " << *entryInst << "\n";
+				errs() << LS->getNestingLevel() << "\n";
+			}
+
       return false;
     }
 
-    // We don't modify the program, so we preserve all analyses.
-    // The LLVM IR of functions isn't ready at this point
     void getAnalysisUsage(AnalysisUsage &AU) const override {
       errs() << "Hello LLVM World at \"getAnalysisUsage\"\n" ;
-      AU.setPreservesAll();
+			AU.addRequired<Noelle>();	
     }
   };
 }
