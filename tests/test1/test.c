@@ -1,5 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include "HALIDE.h"
+
 
 int main (){
   printf("Start Testing\n");

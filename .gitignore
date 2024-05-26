@@ -2,14 +2,13 @@ build/
 
 .cache/
 
-
-a.out 
-
-program.ll
-
-program.bc
+test_opt 
 
 *.o
+
+*.bc
+
+*.ll
 
 compiler_output
 

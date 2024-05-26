@@ -1,27 +1,31 @@
-OPTIONS=-I../misc
-OPT=-O2 -lm
+LIBS=
+OPTIONS=-I../misc 
 
-all: compiler_output program.ll
+all: test_opt
 
-compiler_output: program.bc ../misc/HALIDE.o
-	timeout 10m halide-c $^ 2> $@
+%.bc: %.c
+	clang $(OPTIONS) -O1 -Xclang -disable-llvm-passes -emit-llvm -c $< -o $@
+	llvm-dis $@
 
-program.bc: program.c
-	clang $(OPTIONS) -O1 -Xclang -disable-llvm-passes -fdeclspec -emit-llvm -c $<
-
-program.ll: program.bc
-	llvm-dis $^
-
-program: program.bc ../misc/HALIDE.o
-	clang $(OPTIONS) $^ -o $@
+test_norm.bc: test.bc
+	noelle-norm $^ -o $@
+	llvm-dis $@
 
 ../misc/HALIDE.o: ../misc/HALIDE.c
-	clang $(OPT) -fdeclspec -c $^ -o $@ 
+	clang -O3 -fdeclspec -c $^ -o $@ 
+
+test_with_metadata.bc: test_norm.bc
+	noelle-meta-pdg-embed $^ -o $@
+	llvm-dis $@
+
+test_opt.bc: test_with_metadata.bc
+	noelle-load -load ~/HALIDE/lib/HALIDE.so --Halide $< -o $@
+	llvm-dis $@
+
+test_opt: test_opt.bc ../misc/HALIDE.o 
+	clang $(OPTIONS) $^ -o $@ 
 
 clean:
-	rm -rf program program_optimized program_optimized_output *.bc *.ll a.out diff core* program_output compiler_output *.txt tmpOut;
-	if test -d bitcode ; then cp bitcode/* . ; fi ;
-	rm -f *sorted ;
+	rm -f *.bc *.ll test_opt test_pre_prof output.prof default.* ;
 
-.PHONY: run clean 
-
+.PHONY: clean
